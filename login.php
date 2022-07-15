@@ -8,6 +8,8 @@ require './vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+
+if($_SERVER['REQUEST_METHOD']=='POST'){
 $data = json_decode(file_get_contents("php://input"), true);
 
 $email = $data['email'];
@@ -33,11 +35,14 @@ if(mysqli_num_rows($res)>0){
     ];
     
     $jwt = JWT::encode($payload, $key, 'HS512');
+    http_response_code(200);
 	echo json_encode(array('message' => 'Login pass', 'status' => true,"jwt"=>$jwt));
 
 }else{
+    http_response_code(404);
 
  echo json_encode(array('message' => 'Login failed', 'status' => false));
 
+}
 }
 ?>
